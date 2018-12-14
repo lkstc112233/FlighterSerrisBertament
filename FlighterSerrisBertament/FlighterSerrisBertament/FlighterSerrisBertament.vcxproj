@@ -94,6 +94,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -115,22 +116,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Application_MessageHandling.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Brush.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="DeviceIndependentResources.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Application_MessageHandling.cpp" />
+    <ClCompile Include="Brush.cpp" />
+    <ClCompile Include="DeviceIndependentResources.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
-    <ClCompile Include="main.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
@@ -140,6 +132,7 @@
     <ClInclude Include="Brush.h" />
     <ClInclude Include="DeviceIndependentResources.h" />
     <ClInclude Include="DeviceResources.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="utility.h" />
   </ItemGroup>
