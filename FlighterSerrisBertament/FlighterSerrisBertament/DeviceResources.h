@@ -13,5 +13,7 @@ class DeviceResources {
  public:
   DeviceResources(HWND hwnd, ID2D1Factory* m_pDirect2dFactory);
   ~DeviceResources();
+  bool isValid() { return valid; }
+  ID2D1HwndRenderTarget* getRenderTarget() { return renderTarget; }
   ID2D1SolidColorBrush* getBrush(D2D1::ColorF::Enum color);
 };
