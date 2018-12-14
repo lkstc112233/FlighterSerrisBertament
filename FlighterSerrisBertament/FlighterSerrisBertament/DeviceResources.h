@@ -3,6 +3,7 @@
 #include <map>
 
 #include "Brush.h"
+#include "DeviceIndependentResources.h"
 
 class DeviceResources {
  private:
@@ -11,7 +12,7 @@ class DeviceResources {
   bool valid;
 
  public:
-  DeviceResources(HWND hwnd, ID2D1Factory* m_pDirect2dFactory);
+  DeviceResources(HWND hwnd, DeviceIndependentResources& indepentResources);
   ~DeviceResources();
   bool isValid() { return valid; }
   ID2D1HwndRenderTarget* getRenderTarget() { return renderTarget; }
