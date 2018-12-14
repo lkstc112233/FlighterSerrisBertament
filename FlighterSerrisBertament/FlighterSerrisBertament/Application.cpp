@@ -8,13 +8,9 @@
 #pragma comment(lib, "d2d1")
 #pragma comment(lib, "Dwrite")
 
-Application::Application() : m_hwnd(NULL), m_pDirect2dFactory(NULL) {}
+Application::Application() : m_hwnd(NULL) {}
 
-Application::~Application() {
-  SafeRelease(&m_pDirect2dFactory);
-  SafeRelease(&m_pDWriteFactory);
-  SafeRelease(&m_pTextFormat);
-}
+Application::~Application() {}
 
 void Application::RunMessageLoop() {
   MSG msg;
@@ -56,7 +52,8 @@ HRESULT Application::Initialize() {
 
     // The factory returns the current system DPI. This is also the value it
     // will use to create its own windows.
-    m_pDirect2dFactory->GetDesktopDpi(&dpiX, &dpiY);
+    deviceIndependentResources->getDirect2dFactory()->GetDesktopDpi(&dpiX,
+                                                                    &dpiY);
 
     // Create the window.
     m_hwnd = CreateWindow(WINDOW_CLASS_NAME, WINDOW_DEFAULT_TITLE,
@@ -75,34 +72,8 @@ HRESULT Application::Initialize() {
 }
 
 HRESULT Application::CreateDeviceIndependentResources() {
-  static const WCHAR msc_fontName[] = L"Verdana";
-  static const FLOAT msc_fontSize = 50;
   HRESULT hr = S_OK;
-
-  // Create a Direct2D factory.
-  hr =
-      D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_pDirect2dFactory);
-
-  if (SUCCEEDED(hr)) {
-    // Create a DirectWrite factory.
-    hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED,
-                             __uuidof(m_pDWriteFactory),
-                             reinterpret_cast<IUnknown **>(&m_pDWriteFactory));
-    if (SUCCEEDED(hr)) {
-      // Create a DirectWrite text format object.
-      hr = m_pDWriteFactory->CreateTextFormat(
-          msc_fontName, NULL, DWRITE_FONT_WEIGHT_NORMAL,
-          DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, msc_fontSize,
-          L"",  // locale
-          &m_pTextFormat);
-    }
-    if (SUCCEEDED(hr)) {
-      // Center the text horizontally and vertically.
-      m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-      m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-    }
-  }
-
+  deviceIndependentResources = std::make_unique<DeviceIndependentResources>();
   return hr;
 }
 
@@ -111,7 +82,7 @@ HRESULT Application::CreateDeviceResources() {
 
   if (!deviceResources) {
     deviceResources =
-        std::make_unique<DeviceResources>(m_hwnd, m_pDirect2dFactory);
+        std::make_unique<DeviceResources>(m_hwnd, *deviceIndependentResources);
   }
 
   return hr;
@@ -120,6 +91,9 @@ HRESULT Application::CreateDeviceResources() {
 void Application::DiscardDeviceResources() { deviceResources.reset(); }
 
 HRESULT Application::OnRender() {
+  static const WCHAR msc_fontName[] = L"Verdana";
+  static const FLOAT msc_fontSize = 20;
+
   HRESULT hr = S_OK;
 
   hr = CreateDeviceResources();
@@ -184,15 +158,18 @@ HRESULT Application::OnRender() {
     GetSystemTime(&time);
     std::wstring timeString = std::to_wstring(time.wMilliseconds);
 
-    renderTarget->DrawText(timeString.c_str(), timeString.size(), m_pTextFormat,
-                           D2D1::RectF(0, 0, rtSize.width, rtSize.height),
-                           deviceResources->getBrush(D2D1::ColorF::Black));
+    renderTarget->DrawText(
+        timeString.c_str(), timeString.size(),
+        deviceIndependentResources->getTextFormat(msc_fontName, msc_fontSize),
+        D2D1::RectF(0, 0, rtSize.width, rtSize.height),
+        deviceResources->getBrush(D2D1::ColorF::Black));
 
     std::wstring mouseString =
         L"X: " + std::to_wstring(mouseX) + L"\nY: " + std::to_wstring(mouseY);
 
     renderTarget->DrawText(
-        mouseString.c_str(), mouseString.size(), m_pTextFormat,
+        mouseString.c_str(), mouseString.size(),
+        deviceIndependentResources->getTextFormat(msc_fontName, msc_fontSize),
         D2D1::RectF(0, 0, rtSize.width / 3, rtSize.height / 3),
         deviceResources->getBrush(D2D1::ColorF::Black));
 

@@ -1,13 +1,12 @@
 #pragma once
 
+#include "DeviceIndependentResources.h"
 #include "DeviceResources.h"
 
 class Application {
  private:
   HWND m_hwnd;
-  ID2D1Factory* m_pDirect2dFactory;
-  IDWriteFactory* m_pDWriteFactory;
-  IDWriteTextFormat* m_pTextFormat;
+  std::unique_ptr<DeviceIndependentResources> deviceIndependentResources;
   std::unique_ptr<DeviceResources> deviceResources;
 
  private:
