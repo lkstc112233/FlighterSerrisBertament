@@ -33,6 +33,9 @@
     <ClCompile Include="DeviceResources.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DeviceIndependentResources.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -48,6 +51,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DeviceResources.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceIndependentResources.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
