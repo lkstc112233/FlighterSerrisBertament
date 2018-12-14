@@ -4,10 +4,10 @@
 #include <windows.h>
 
 // C RunTime Header Files:
-#include <cstdlib>
-#include <memory>
-#include <cwchar>
 #include <cmath>
+#include <cstdlib>
+#include <cwchar>
+#include <memory>
 
 #include <d2d1.h>
 #include <d2d1helper.h>

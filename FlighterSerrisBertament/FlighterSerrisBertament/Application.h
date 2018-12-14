@@ -1,60 +1,54 @@
 #pragma once
 
-class Application
-{
-private:
-	HWND m_hwnd;
-	ID2D1Factory* m_pDirect2dFactory;
-	IDWriteFactory* m_pDWriteFactory;
-	IDWriteTextFormat* m_pTextFormat;
-	ID2D1HwndRenderTarget* m_pRenderTarget;
-	ID2D1SolidColorBrush* m_pLightSlateGrayBrush;
-	ID2D1SolidColorBrush* m_pCornflowerBlueBrush;
-	ID2D1SolidColorBrush* m_pBlackBrush;
-private:
-	int mouseX = 0;
-	int mouseY = 0;
-public:
-	Application();
-	~Application();
+class Application {
+ private:
+  HWND m_hwnd;
+  ID2D1Factory* m_pDirect2dFactory;
+  IDWriteFactory* m_pDWriteFactory;
+  IDWriteTextFormat* m_pTextFormat;
+  ID2D1HwndRenderTarget* m_pRenderTarget;
+  ID2D1SolidColorBrush* m_pLightSlateGrayBrush;
+  ID2D1SolidColorBrush* m_pCornflowerBlueBrush;
+  ID2D1SolidColorBrush* m_pBlackBrush;
 
-	// Register the window class and call methods for instantiating drawing resources
-	HRESULT Initialize();
+ private:
+  int mouseX = 0;
+  int mouseY = 0;
 
-	// Process and dispatch messages
-	void RunMessageLoop();
+ public:
+  Application();
+  ~Application();
 
-private:
-	// Initialize device-independent resources.
-	HRESULT CreateDeviceIndependentResources();
+  // Register the window class and call methods for instantiating drawing
+  // resources
+  HRESULT Initialize();
 
-	// Initialize device-dependent resources.
-	HRESULT CreateDeviceResources();
+  // Process and dispatch messages
+  void RunMessageLoop();
 
-	// Release device-dependent resource.
-	void DiscardDeviceResources();
+ private:
+  // Initialize device-independent resources.
+  HRESULT CreateDeviceIndependentResources();
 
-	// Draw content.
-	HRESULT OnRender();
+  // Initialize device-dependent resources.
+  HRESULT CreateDeviceResources();
 
-	// Resize the render target.
-	void OnResize(
-		UINT width,
-		UINT height
-	);
+  // Release device-dependent resource.
+  void DiscardDeviceResources();
 
-	// Records the mouse position
-	void mouseMove(int x, int y)
-	{
-		mouseX = x;
-		mouseY = y;
-	}
+  // Draw content.
+  HRESULT OnRender();
 
-	// The windows procedure.
-	static LRESULT CALLBACK WndProc(
-		HWND hWnd,
-		UINT message,
-		WPARAM wParam,
-		LPARAM lParam
-	);
+  // Resize the render target.
+  void OnResize(UINT width, UINT height);
+
+  // Records the mouse position
+  void mouseMove(int x, int y) {
+    mouseX = x;
+    mouseY = y;
+  }
+
+  // The windows procedure.
+  static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
+                                  LPARAM lParam);
 };

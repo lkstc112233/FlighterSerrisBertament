@@ -4,89 +4,70 @@
 
 #include "Application.h"
 
+LRESULT CALLBACK Application::WndProc(HWND hwnd, UINT message, WPARAM wParam,
+                                      LPARAM lParam) {
+  LRESULT result = 0;
 
-LRESULT CALLBACK Application::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	LRESULT result = 0;
+  if (message == WM_CREATE) {
+    LPCREATESTRUCT pcs = (LPCREATESTRUCT)lParam;
+    Application *pApplication = (Application *)pcs->lpCreateParams;
 
-	if (message == WM_CREATE)
-	{
-		LPCREATESTRUCT pcs = (LPCREATESTRUCT)lParam;
-		Application *pApplication = (Application *)pcs->lpCreateParams;
+    ::SetWindowLongPtrW(hwnd, GWLP_USERDATA, PtrToUlong(pApplication));
 
-		::SetWindowLongPtrW(
-			hwnd,
-			GWLP_USERDATA,
-			PtrToUlong(pApplication)
-		);
+    result = 1;
+  } else {
+    Application *pApplication = reinterpret_cast<Application *>(
+        static_cast<LONG_PTR>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA)));
 
-		result = 1;
-	}
-	else
-	{
-		Application *pApplication = reinterpret_cast<Application *>(static_cast<LONG_PTR>(
-			::GetWindowLongPtrW(
-				hwnd,
-				GWLP_USERDATA
-			)));
+    bool wasHandled = false;
 
-		bool wasHandled = false;
+    if (pApplication) {
+      switch (message) {
+        case WM_SIZE: {
+          UINT width = LOWORD(lParam);
+          UINT height = HIWORD(lParam);
+          pApplication->OnResize(width, height);
+        }
+          result = 0;
+          wasHandled = true;
+          break;
 
-		if (pApplication)
-		{
-			switch (message)
-			{
-			case WM_SIZE:
-			{
-				UINT width = LOWORD(lParam);
-				UINT height = HIWORD(lParam);
-				pApplication->OnResize(width, height);
-			}
-			result = 0;
-			wasHandled = true;
-			break;
+        case WM_DISPLAYCHANGE: {
+          InvalidateRect(hwnd, NULL, FALSE);
+        }
+          result = 0;
+          wasHandled = true;
+          break;
 
-			case WM_DISPLAYCHANGE:
-			{
-				InvalidateRect(hwnd, NULL, FALSE);
-			}
-			result = 0;
-			wasHandled = true;
-			break;
+        case WM_MOUSEMOVE: {
+          pApplication->mouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+          InvalidateRect(hwnd, NULL, FALSE);
+        }
+          result = 0;
+          wasHandled = true;
+          break;
 
-			case WM_MOUSEMOVE:
-			{
-				pApplication->mouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-				InvalidateRect(hwnd, NULL, FALSE);
-			}
-			result = 0;
-			wasHandled = true;
-			break;
+        case WM_PAINT: {
+          pApplication->OnRender();
+          ValidateRect(hwnd, NULL);
+        }
+          result = 0;
+          wasHandled = true;
+          break;
 
-			case WM_PAINT:
-			{
-				pApplication->OnRender();
-				ValidateRect(hwnd, NULL);
-			}
-			result = 0;
-			wasHandled = true;
-			break;
+        case WM_DESTROY: {
+          PostQuitMessage(0);
+        }
+          result = 1;
+          wasHandled = true;
+          break;
+      }
+    }
 
-			case WM_DESTROY:
-			{
-				PostQuitMessage(0);
-			}
-			result = 1;
-			wasHandled = true;
-			break;
-			}
-		}
+    if (!wasHandled) {
+      result = DefWindowProc(hwnd, message, wParam, lParam);
+    }
+  }
 
-		if (!wasHandled)
-		{
-			result = DefWindowProc(hwnd, message, wParam, lParam);
-		}
-	}
-
-	return result;
+  return result;
 }
