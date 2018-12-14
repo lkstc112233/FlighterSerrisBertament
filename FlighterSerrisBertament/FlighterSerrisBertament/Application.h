@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Brush.h"
+#include "DeviceResources.h"
 
 class Application {
  private:
@@ -8,10 +8,7 @@ class Application {
   ID2D1Factory* m_pDirect2dFactory;
   IDWriteFactory* m_pDWriteFactory;
   IDWriteTextFormat* m_pTextFormat;
-  ID2D1HwndRenderTarget* m_pRenderTarget;
-  std::unique_ptr<Brush> lightSlateGrayBrush;
-  std::unique_ptr<Brush> cornflowerBlueBrush;
-  std::unique_ptr<Brush> blackBrush;
+  std::unique_ptr<DeviceResources> deviceResources;
 
  private:
   int mouseX = 0;

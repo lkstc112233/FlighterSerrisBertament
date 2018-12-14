@@ -8,14 +8,12 @@
 #pragma comment(lib, "d2d1")
 #pragma comment(lib, "Dwrite")
 
-Application::Application()
-    : m_hwnd(NULL), m_pDirect2dFactory(NULL), m_pRenderTarget(NULL) {}
+Application::Application() : m_hwnd(NULL), m_pDirect2dFactory(NULL) {}
 
 Application::~Application() {
   SafeRelease(&m_pDirect2dFactory);
   SafeRelease(&m_pDWriteFactory);
   SafeRelease(&m_pTextFormat);
-  SafeRelease(&m_pRenderTarget);
 }
 
 void Application::RunMessageLoop() {
@@ -111,75 +109,49 @@ HRESULT Application::CreateDeviceIndependentResources() {
 HRESULT Application::CreateDeviceResources() {
   HRESULT hr = S_OK;
 
-  if (!m_pRenderTarget) {
-    RECT rc;
-    GetClientRect(m_hwnd, &rc);
-
-    D2D1_SIZE_U size = D2D1::SizeU(rc.right - rc.left, rc.bottom - rc.top);
-
-    // Create a Direct2D render target.
-    hr = m_pDirect2dFactory->CreateHwndRenderTarget(
-        D2D1::RenderTargetProperties(),
-        D2D1::HwndRenderTargetProperties(m_hwnd, size), &m_pRenderTarget);
-
-    if (SUCCEEDED(hr)) {
-      // Create a gray brush.
-      lightSlateGrayBrush = std::make_unique<Brush>(
-          m_pRenderTarget, D2D1::ColorF(D2D1::ColorF::LightSlateGray));
-    }
-    if (lightSlateGrayBrush->isValid()) {
-      // Create a blue brush.
-      cornflowerBlueBrush = std::make_unique<Brush>(
-          m_pRenderTarget, D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
-    }
-    if (cornflowerBlueBrush->isValid()) {
-      // Create a black brush.
-      blackBrush = std::make_unique<Brush>(m_pRenderTarget,
-                                           D2D1::ColorF(D2D1::ColorF::Black));
-    }
+  if (!deviceResources) {
+    deviceResources =
+        std::make_unique<DeviceResources>(m_hwnd, m_pDirect2dFactory);
   }
 
   return hr;
 }
 
-void Application::DiscardDeviceResources() {
-  SafeRelease(&m_pRenderTarget);
-  lightSlateGrayBrush.reset();
-  cornflowerBlueBrush.reset();
-  blackBrush.reset();
-}
+void Application::DiscardDeviceResources() { deviceResources.reset(); }
 
 HRESULT Application::OnRender() {
   HRESULT hr = S_OK;
 
   hr = CreateDeviceResources();
-  if (SUCCEEDED(hr)) {
+
+  if (deviceResources->isValid()) {
     static const WCHAR sc_helloWorld[] = L"Hello, World!";
+    auto renderTarget = deviceResources->getRenderTarget();
 
-    m_pRenderTarget->BeginDraw();
+    renderTarget->BeginDraw();
 
-    m_pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+    renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
-    m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
+    renderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
 
-    D2D1_SIZE_F rtSize = m_pRenderTarget->GetSize();
+    D2D1_SIZE_F rtSize = renderTarget->GetSize();
 
     // Draw a grid background.
     int width = static_cast<int>(rtSize.width);
     int height = static_cast<int>(rtSize.height);
 
     for (int x = 0; x < width; x += 10) {
-      m_pRenderTarget->DrawLine(
+      renderTarget->DrawLine(
           D2D1::Point2F(static_cast<FLOAT>(x), 0.0f),
           D2D1::Point2F(static_cast<FLOAT>(x), rtSize.height),
-          lightSlateGrayBrush->getBrush(), 0.5f);
+          deviceResources->getBrush(D2D1::ColorF::LightSlateGray), 0.5f);
     }
 
     for (int y = 0; y < height; y += 10) {
-      m_pRenderTarget->DrawLine(
+      renderTarget->DrawLine(
           D2D1::Point2F(0.0f, static_cast<FLOAT>(y)),
           D2D1::Point2F(rtSize.width, static_cast<FLOAT>(y)),
-          lightSlateGrayBrush->getBrush(), 0.5f);
+          deviceResources->getBrush(D2D1::ColorF::LightSlateGray), 0.5f);
     }
 
     // Draw two rectangles.
@@ -197,33 +169,34 @@ HRESULT Application::OnRender() {
         10.0F, 10.0F);
 
     // Draw a filled rectangle.
-    m_pRenderTarget->FillRectangle(&rectangle1,
-                                   lightSlateGrayBrush->getBrush());
+    renderTarget->FillRectangle(
+        &rectangle1, deviceResources->getBrush(D2D1::ColorF::LightSlateGray));
 
     // Draw the outline of a rectangle.
-    m_pRenderTarget->DrawRectangle(&rectangle2,
-                                   cornflowerBlueBrush->getBrush());
+    renderTarget->DrawRectangle(
+        &rectangle2, deviceResources->getBrush(D2D1::ColorF::CornflowerBlue));
 
     // Draw the ellipse following the mouse.
-    m_pRenderTarget->FillEllipse(&ellipse, cornflowerBlueBrush->getBrush());
+    renderTarget->FillEllipse(
+        &ellipse, deviceResources->getBrush(D2D1::ColorF::CornflowerBlue));
 
     SYSTEMTIME time;
     GetSystemTime(&time);
     std::wstring timeString = std::to_wstring(time.wMilliseconds);
 
-    m_pRenderTarget->DrawText(
-        timeString.c_str(), timeString.size(), m_pTextFormat,
-        D2D1::RectF(0, 0, rtSize.width, rtSize.height), blackBrush->getBrush());
+    renderTarget->DrawText(timeString.c_str(), timeString.size(), m_pTextFormat,
+                           D2D1::RectF(0, 0, rtSize.width, rtSize.height),
+                           deviceResources->getBrush(D2D1::ColorF::Black));
 
     std::wstring mouseString =
         L"X: " + std::to_wstring(mouseX) + L"\nY: " + std::to_wstring(mouseY);
 
-    m_pRenderTarget->DrawText(
+    renderTarget->DrawText(
         mouseString.c_str(), mouseString.size(), m_pTextFormat,
         D2D1::RectF(0, 0, rtSize.width / 3, rtSize.height / 3),
-        blackBrush->getBrush());
+        deviceResources->getBrush(D2D1::ColorF::Black));
 
-    hr = m_pRenderTarget->EndDraw();
+    hr = renderTarget->EndDraw();
   }
 
   if (hr == D2DERR_RECREATE_TARGET) {
@@ -235,10 +208,10 @@ HRESULT Application::OnRender() {
 }
 
 void Application::OnResize(UINT width, UINT height) {
-  if (m_pRenderTarget) {
+  if (deviceResources) {
     // Note: This method can fail, but it's okay to ignore the
     // error here, because the error will be returned again
     // the next time EndDraw is called.
-    m_pRenderTarget->Resize(D2D1::SizeU(width, height));
+    deviceResources->getRenderTarget()->Resize(D2D1::SizeU(width, height));
   }
 }
