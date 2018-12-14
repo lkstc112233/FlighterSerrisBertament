@@ -122,6 +122,7 @@
     <ClCompile Include="DeviceIndependentResources.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MouseFlower.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -132,6 +133,7 @@
     <ClInclude Include="Brush.h" />
     <ClInclude Include="DeviceIndependentResources.h" />
     <ClInclude Include="DeviceResources.h" />
+    <ClInclude Include="MouseFlower.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="utility.h" />
