@@ -21,13 +21,13 @@ DeviceResources::~DeviceResources() { SafeRelease(&renderTarget); }
 ID2D1SolidColorBrush* DeviceResources::getBrush(D2D1::ColorF::Enum color) {
   auto brush = defaultBrushes.find(color);
   if (brush == defaultBrushes.end()) {
-    auto iteratorPair =
-        defaultBrushes.emplace(color, Brush(renderTarget, D2D1::ColorF(color)));
+    auto iteratorPair = defaultBrushes.emplace(
+        color, std::make_unique<Brush>(renderTarget, D2D1::ColorF(color)));
     if (iteratorPair.second) {
       brush = iteratorPair.first;
     } else {
       valid = false;
     }
   }
-  return brush->second.getBrush();
+  return brush->second->getBrush();
 }

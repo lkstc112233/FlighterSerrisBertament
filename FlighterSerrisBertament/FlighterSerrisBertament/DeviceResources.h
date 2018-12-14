@@ -7,7 +7,7 @@
 class DeviceResources {
  private:
   ID2D1HwndRenderTarget* renderTarget;
-  std::map<D2D1::ColorF::Enum, Brush> defaultBrushes;
+  std::map<D2D1::ColorF::Enum, std::unique_ptr<Brush>> defaultBrushes;
   bool valid;
 
  public:
