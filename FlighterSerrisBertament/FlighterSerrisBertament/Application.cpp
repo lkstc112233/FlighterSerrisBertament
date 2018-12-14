@@ -9,19 +9,13 @@
 #pragma comment(lib, "Dwrite")
 
 Application::Application()
-    : m_hwnd(NULL),
-      m_pDirect2dFactory(NULL),
-      m_pRenderTarget(NULL),
-      m_pLightSlateGrayBrush(NULL),
-      m_pCornflowerBlueBrush(NULL) {}
+    : m_hwnd(NULL), m_pDirect2dFactory(NULL), m_pRenderTarget(NULL) {}
 
 Application::~Application() {
   SafeRelease(&m_pDirect2dFactory);
   SafeRelease(&m_pDWriteFactory);
   SafeRelease(&m_pTextFormat);
   SafeRelease(&m_pRenderTarget);
-  SafeRelease(&m_pLightSlateGrayBrush);
-  SafeRelease(&m_pCornflowerBlueBrush);
 }
 
 void Application::RunMessageLoop() {
@@ -130,18 +124,18 @@ HRESULT Application::CreateDeviceResources() {
 
     if (SUCCEEDED(hr)) {
       // Create a gray brush.
-      hr = m_pRenderTarget->CreateSolidColorBrush(
-          D2D1::ColorF(D2D1::ColorF::LightSlateGray), &m_pLightSlateGrayBrush);
+      lightSlateGrayBrush = std::make_unique<Brush>(
+          m_pRenderTarget, D2D1::ColorF(D2D1::ColorF::LightSlateGray));
     }
-    if (SUCCEEDED(hr)) {
+    if (lightSlateGrayBrush->isValid()) {
       // Create a blue brush.
-      hr = m_pRenderTarget->CreateSolidColorBrush(
-          D2D1::ColorF(D2D1::ColorF::CornflowerBlue), &m_pCornflowerBlueBrush);
+      cornflowerBlueBrush = std::make_unique<Brush>(
+          m_pRenderTarget, D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
     }
-    if (SUCCEEDED(hr)) {
+    if (cornflowerBlueBrush->isValid()) {
       // Create a black brush.
-      hr = m_pRenderTarget->CreateSolidColorBrush(
-          D2D1::ColorF(D2D1::ColorF::Black), &m_pBlackBrush);
+      blackBrush = std::make_unique<Brush>(m_pRenderTarget,
+                                           D2D1::ColorF(D2D1::ColorF::Black));
     }
   }
 
@@ -150,9 +144,9 @@ HRESULT Application::CreateDeviceResources() {
 
 void Application::DiscardDeviceResources() {
   SafeRelease(&m_pRenderTarget);
-  SafeRelease(&m_pLightSlateGrayBrush);
-  SafeRelease(&m_pCornflowerBlueBrush);
-  SafeRelease(&m_pBlackBrush);
+  lightSlateGrayBrush.reset();
+  cornflowerBlueBrush.reset();
+  blackBrush.reset();
 }
 
 HRESULT Application::OnRender() {
@@ -178,14 +172,14 @@ HRESULT Application::OnRender() {
       m_pRenderTarget->DrawLine(
           D2D1::Point2F(static_cast<FLOAT>(x), 0.0f),
           D2D1::Point2F(static_cast<FLOAT>(x), rtSize.height),
-          m_pLightSlateGrayBrush, 0.5f);
+          lightSlateGrayBrush->getBrush(), 0.5f);
     }
 
     for (int y = 0; y < height; y += 10) {
       m_pRenderTarget->DrawLine(
           D2D1::Point2F(0.0f, static_cast<FLOAT>(y)),
           D2D1::Point2F(rtSize.width, static_cast<FLOAT>(y)),
-          m_pLightSlateGrayBrush, 0.5f);
+          lightSlateGrayBrush->getBrush(), 0.5f);
     }
 
     // Draw two rectangles.
@@ -198,16 +192,20 @@ HRESULT Application::OnRender() {
                     rtSize.width / 2 + 100.0f, rtSize.height / 2 + 100.0f);
 
     // And an ellipse
-    D2D1_ELLIPSE ellipse = D2D1::Ellipse(D2D1::Point2F(mouseX, mouseY), 10, 10);
+    D2D1_ELLIPSE ellipse = D2D1::Ellipse(
+        D2D1::Point2F(static_cast<FLOAT>(mouseX), static_cast<FLOAT>(mouseY)),
+        10.0F, 10.0F);
 
     // Draw a filled rectangle.
-    m_pRenderTarget->FillRectangle(&rectangle1, m_pLightSlateGrayBrush);
+    m_pRenderTarget->FillRectangle(&rectangle1,
+                                   lightSlateGrayBrush->getBrush());
 
     // Draw the outline of a rectangle.
-    m_pRenderTarget->DrawRectangle(&rectangle2, m_pCornflowerBlueBrush);
+    m_pRenderTarget->DrawRectangle(&rectangle2,
+                                   cornflowerBlueBrush->getBrush());
 
     // Draw the ellipse following the mouse.
-    m_pRenderTarget->FillEllipse(&ellipse, m_pCornflowerBlueBrush);
+    m_pRenderTarget->FillEllipse(&ellipse, cornflowerBlueBrush->getBrush());
 
     SYSTEMTIME time;
     GetSystemTime(&time);
@@ -215,14 +213,15 @@ HRESULT Application::OnRender() {
 
     m_pRenderTarget->DrawText(
         timeString.c_str(), timeString.size(), m_pTextFormat,
-        D2D1::RectF(0, 0, rtSize.width, rtSize.height), m_pBlackBrush);
+        D2D1::RectF(0, 0, rtSize.width, rtSize.height), blackBrush->getBrush());
 
     std::wstring mouseString =
         L"X: " + std::to_wstring(mouseX) + L"\nY: " + std::to_wstring(mouseY);
 
     m_pRenderTarget->DrawText(
         mouseString.c_str(), mouseString.size(), m_pTextFormat,
-        D2D1::RectF(0, 0, rtSize.width / 3, rtSize.height / 3), m_pBlackBrush);
+        D2D1::RectF(0, 0, rtSize.width / 3, rtSize.height / 3),
+        blackBrush->getBrush());
 
     hr = m_pRenderTarget->EndDraw();
   }

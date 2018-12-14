@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Brush.h"
+
 class Application {
  private:
   HWND m_hwnd;
@@ -7,9 +9,9 @@ class Application {
   IDWriteFactory* m_pDWriteFactory;
   IDWriteTextFormat* m_pTextFormat;
   ID2D1HwndRenderTarget* m_pRenderTarget;
-  ID2D1SolidColorBrush* m_pLightSlateGrayBrush;
-  ID2D1SolidColorBrush* m_pCornflowerBlueBrush;
-  ID2D1SolidColorBrush* m_pBlackBrush;
+  std::unique_ptr<Brush> lightSlateGrayBrush;
+  std::unique_ptr<Brush> cornflowerBlueBrush;
+  std::unique_ptr<Brush> blackBrush;
 
  private:
   int mouseX = 0;
