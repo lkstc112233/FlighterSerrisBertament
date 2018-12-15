@@ -25,3 +25,5 @@ inline void SafeRelease(Interface **ppInterfaceToRelease) {
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #define HINST_THISCOMPONENT ((HINSTANCE)&__ImageBase)
 #endif
+
+D2D1::ColorF::Enum getRandomColor();
