@@ -11,6 +11,6 @@ class MouseFlower : public Sprite {
   ~MouseFlower();
   void mouseTo(int x, int y);
   // Updates the status of the sprite. Return any new sprites.
-  virtual std::list<std::unique_ptr<Sprite>> update() = 0;
+  virtual std::list<std::shared_ptr<Sprite>> update() = 0;
   virtual void draw(ID2D1HwndRenderTarget* renderTarget) = 0;
 };

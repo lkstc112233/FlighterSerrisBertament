@@ -11,5 +11,5 @@ void MouseFlower::mouseTo(int xin, int yin) {
   y = yin;
 }
 // Updates the status of the sprite. Return any new sprites.
-std::list<std::unique_ptr<Sprite>> MouseFlower::update() {}
+std::list<std::shared_ptr<Sprite>> MouseFlower::update() { return {}; }
 void MouseFlower::draw(ID2D1HwndRenderTarget* renderTarget) {}
