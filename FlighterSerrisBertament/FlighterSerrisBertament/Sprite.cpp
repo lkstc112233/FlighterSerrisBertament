@@ -12,8 +12,8 @@ void SpriteManager::update() {
   sprites.remove_if([](const auto& s) { return s->isDead(); });
 }
 
-void SpriteManager::draw(ID2D1HwndRenderTarget* renderTarget) {
+void SpriteManager::draw(DeviceResources& deviceResources) {
   for (const auto& sprite : sprites) {
-    sprite->draw(renderTarget);
+    sprite->draw(deviceResources);
   }
 }
