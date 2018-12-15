@@ -4,6 +4,9 @@
 
 #include "Application.h"
 
+constexpr static const UINT_PTR TIMER_ID = 0xDEAD;
+constexpr static const UINT TIMER_ELAPSE = USER_TIMER_MINIMUM;
+
 LRESULT CALLBACK Application::WndProc(HWND hwnd, UINT message, WPARAM wParam,
                                       LPARAM lParam) {
   LRESULT result = 0;
@@ -13,6 +16,8 @@ LRESULT CALLBACK Application::WndProc(HWND hwnd, UINT message, WPARAM wParam,
     Application *pApplication = (Application *)pcs->lpCreateParams;
 
     ::SetWindowLongPtrW(hwnd, GWLP_USERDATA, PtrToUlong(pApplication));
+
+    ::SetTimer(hwnd, TIMER_ID, TIMER_ELAPSE, NULL);
 
     result = 1;
   } else {
@@ -31,7 +36,12 @@ LRESULT CALLBACK Application::WndProc(HWND hwnd, UINT message, WPARAM wParam,
           result = 0;
           wasHandled = true;
           break;
-
+        case WM_TIMER:
+          result = 0;
+          if (wasHandled = (wParam == TIMER_ID)) {
+            InvalidateRect(hwnd, NULL, FALSE);
+          }
+          break;
         case WM_DISPLAYCHANGE: {
           InvalidateRect(hwnd, NULL, FALSE);
         }
@@ -48,6 +58,7 @@ LRESULT CALLBACK Application::WndProc(HWND hwnd, UINT message, WPARAM wParam,
           break;
 
         case WM_PAINT: {
+          pApplication->spriteManager.update();
           pApplication->OnRender();
           ValidateRect(hwnd, NULL);
         }
