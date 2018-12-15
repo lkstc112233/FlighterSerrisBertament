@@ -7,6 +7,7 @@ class MouseFlower : public Sprite {
   int y;
 
  public:
+  constexpr static const float FLOWER_RADIUS = 10.0F;
   MouseFlower();
   ~MouseFlower();
   void mouseTo(int x, int y);
