@@ -8,7 +8,9 @@
 #pragma comment(lib, "d2d1")
 #pragma comment(lib, "Dwrite")
 
-Application::Application() : m_hwnd(NULL) {}
+Application::Application() : m_hwnd(NULL) {
+  mouseFlower = std::make_shared<MouseFlower>();
+}
 
 Application::~Application() {}
 
@@ -137,10 +139,7 @@ HRESULT Application::OnRender() {
         D2D1::RectF(rtSize.width / 2 - 100.0f, rtSize.height / 2 - 100.0f,
                     rtSize.width / 2 + 100.0f, rtSize.height / 2 + 100.0f);
 
-    // And an ellipse
-    D2D1_ELLIPSE ellipse = D2D1::Ellipse(
-        D2D1::Point2F(static_cast<FLOAT>(mouseX), static_cast<FLOAT>(mouseY)),
-        10.0F, 10.0F);
+    mouseFlower->draw(*deviceResources);
 
     // Draw a filled rectangle.
     renderTarget->FillRectangle(
@@ -150,10 +149,6 @@ HRESULT Application::OnRender() {
     renderTarget->DrawRectangle(
         &rectangle2, deviceResources->getBrush(D2D1::ColorF::CornflowerBlue));
 
-    // Draw the ellipse following the mouse.
-    renderTarget->FillEllipse(
-        &ellipse, deviceResources->getBrush(D2D1::ColorF::CornflowerBlue));
-
     SYSTEMTIME time;
     GetSystemTime(&time);
     std::wstring timeString = std::to_wstring(time.wMilliseconds);
@@ -162,15 +157,6 @@ HRESULT Application::OnRender() {
         timeString.c_str(), timeString.size(),
         deviceIndependentResources->getTextFormat(msc_fontName, msc_fontSize),
         D2D1::RectF(0, 0, rtSize.width, rtSize.height),
-        deviceResources->getBrush(D2D1::ColorF::Black));
-
-    std::wstring mouseString =
-        L"X: " + std::to_wstring(mouseX) + L"\nY: " + std::to_wstring(mouseY);
-
-    renderTarget->DrawText(
-        mouseString.c_str(), mouseString.size(),
-        deviceIndependentResources->getTextFormat(msc_fontName, msc_fontSize),
-        D2D1::RectF(0, 0, rtSize.width / 3, rtSize.height / 3),
         deviceResources->getBrush(D2D1::ColorF::Black));
 
     hr = renderTarget->EndDraw();

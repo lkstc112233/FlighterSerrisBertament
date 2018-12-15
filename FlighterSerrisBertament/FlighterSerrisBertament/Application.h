@@ -2,16 +2,18 @@
 
 #include "DeviceIndependentResources.h"
 #include "DeviceResources.h"
+#include "MouseFlower.h"
+#include "Sprite.h"
 
 class Application {
  private:
   HWND m_hwnd;
   std::unique_ptr<DeviceIndependentResources> deviceIndependentResources;
   std::unique_ptr<DeviceResources> deviceResources;
+  SpriteManager spriteManager;
 
  private:
-  int mouseX = 0;
-  int mouseY = 0;
+  std::shared_ptr<MouseFlower> mouseFlower;
 
  public:
   Application();
@@ -41,10 +43,7 @@ class Application {
   void OnResize(UINT width, UINT height);
 
   // Records the mouse position
-  void mouseMove(int x, int y) {
-    mouseX = x;
-    mouseY = y;
-  }
+  void mouseMove(int x, int y) { mouseFlower->mouseTo(x, y); }
 
   // The windows procedure.
   static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
