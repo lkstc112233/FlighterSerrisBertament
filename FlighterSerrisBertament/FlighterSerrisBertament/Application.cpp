@@ -10,6 +10,7 @@
 
 Application::Application() : m_hwnd(NULL) {
   mouseFlower = std::make_shared<MouseFlower>();
+  spriteManager.addSprite(mouseFlower);
 }
 
 Application::~Application() {}
@@ -139,7 +140,7 @@ HRESULT Application::OnRender() {
         D2D1::RectF(rtSize.width / 2 - 100.0f, rtSize.height / 2 - 100.0f,
                     rtSize.width / 2 + 100.0f, rtSize.height / 2 + 100.0f);
 
-    mouseFlower->draw(*deviceResources);
+    spriteManager.draw(*deviceResources);
 
     // Draw a filled rectangle.
     renderTarget->FillRectangle(
