@@ -20,5 +20,6 @@ class SpriteManager {
   SpriteManager() {}
   ~SpriteManager() {}
   void update();
+  void addSprite(std::shared_ptr<Sprite> sprite);
   void draw(DeviceResources& deviceResources);
 };

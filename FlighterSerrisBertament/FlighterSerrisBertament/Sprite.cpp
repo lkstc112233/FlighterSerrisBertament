@@ -2,6 +2,10 @@
 
 #include "Sprite.h"
 
+void SpriteManager::addSprite(std::shared_ptr<Sprite> sprite) {
+  sprites.emplace_back(sprite);
+}
+
 void SpriteManager::update() {
   std::list<std::shared_ptr<Sprite>> addedSprites;
   for (const auto& sprite : sprites) {
