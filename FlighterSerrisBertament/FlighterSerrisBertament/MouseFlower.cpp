@@ -27,6 +27,7 @@ std::list<std::shared_ptr<Sprite>> MouseFlower::update() {
     float alpha;
     int life;
     int lifeMax;
+    D2D1::ColorF::Enum color;
 
    public:
     Shadow(float xin, float yin, float vxin, float vyin, float axin, float ayin,
@@ -39,7 +40,10 @@ std::list<std::shared_ptr<Sprite>> MouseFlower::update() {
           ay(ayin),
           alpha(1.0),
           life(lifein),
-          lifeMax(lifein) {}
+          lifeMax(lifein) {
+      // Pick a random color from D2D1::ColorF.
+      color = getRandomColor();
+    }
     bool isDead() { return life <= 0; }
     std::list<std::shared_ptr<Sprite>> update() {
       x += vx;
@@ -54,18 +58,16 @@ std::list<std::shared_ptr<Sprite>> MouseFlower::update() {
       // Draw an ellipse
       D2D1_ELLIPSE ellipse = D2D1::Ellipse(
           D2D1::Point2F(static_cast<FLOAT>(x), static_cast<FLOAT>(y)),
-          FLOWER_RADIUS, FLOWER_RADIUS);
-
-      // Pick a random color from D2D1::ColorF.
-      auto color = getRandomColor();
+          FLOWER_RADIUS / 3, FLOWER_RADIUS / 3);
 
       auto brush = deviceResources.getBrush(color);
       auto oldOpacity = brush->GetOpacity();
       brush->SetOpacity(alpha);
 
-      // Draw the ellipse following the mouse.
       deviceResources.getRenderTarget()->FillEllipse(&ellipse, brush);
       brush->SetOpacity(oldOpacity);
+      deviceResources.getRenderTarget()->DrawEllipse(
+          &ellipse, deviceResources.getBrush(D2D1::ColorF::Black));
     }
   };
   if (--generateShadowCountdown < 0) {
@@ -76,10 +78,11 @@ std::list<std::shared_ptr<Sprite>> MouseFlower::update() {
         MIN_LIFE_SPAWN_SHADOW, MAX_LIFE_SPAWN_SHADOW);
     static std::normal_distribution<float> speedDistribution(0, 1);
     generateShadowCountdown = countdownDistribution(randomEngine);
-    return {std::make_shared<Shadow>(
-        static_cast<float>(x), static_cast<float>(y),
-        speedDistribution(randomEngine), speedDistribution(randomEngine), 0.0F,
-        DEFAULT_AY, lifeDistribution(randomEngine))};
+    return {
+        std::make_shared<Shadow>(static_cast<float>(x), static_cast<float>(y),
+                                 speedDistribution(randomEngine) * 10,
+                                 speedDistribution(randomEngine) * 10, 0.0F,
+                                 DEFAULT_AY, lifeDistribution(randomEngine))};
   }
   return {};
 }
