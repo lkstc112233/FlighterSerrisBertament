@@ -2,7 +2,7 @@
 
 #include "MouseFlower.h"
 
-MouseFlower::MouseFlower() {}
+MouseFlower::MouseFlower() : x(0), y(0) {}
 
 MouseFlower::~MouseFlower() {}
 
