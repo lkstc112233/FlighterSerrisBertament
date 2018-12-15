@@ -58,6 +58,14 @@ LRESULT CALLBACK Application::WndProc(HWND hwnd, UINT message, WPARAM wParam,
           break;
 
         case WM_PAINT: {
+          SYSTEMTIME time;
+          GetSystemTime(&time);
+          if (pApplication->fpsSecondRecord != time.wSecond) {
+            pApplication->fpsSecondRecord = time.wSecond;
+            pApplication->fps = pApplication->fpsFrameCount;
+            pApplication->fpsFrameCount = 0;
+          }
+          pApplication->fpsFrameCount += 1;
           pApplication->spriteManager.update();
           pApplication->OnRender();
           ValidateRect(hwnd, NULL);

@@ -13,6 +13,9 @@ class Application {
   SpriteManager spriteManager;
 
  private:
+  int fps;
+  int fpsSecondRecord;
+  int fpsFrameCount;
   std::shared_ptr<MouseFlower> mouseFlower;
 
  public:

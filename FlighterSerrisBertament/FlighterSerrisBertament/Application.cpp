@@ -8,7 +8,7 @@
 #pragma comment(lib, "d2d1")
 #pragma comment(lib, "Dwrite")
 
-Application::Application() : m_hwnd(NULL) {
+Application::Application() : m_hwnd(NULL), fps(0) {
   mouseFlower = std::make_shared<MouseFlower>();
   spriteManager.addSprite(mouseFlower);
 }
@@ -150,9 +150,7 @@ HRESULT Application::OnRender() {
     renderTarget->DrawRectangle(
         &rectangle2, deviceResources->getBrush(D2D1::ColorF::CornflowerBlue));
 
-    SYSTEMTIME time;
-    GetSystemTime(&time);
-    std::wstring timeString = std::to_wstring(time.wMilliseconds);
+    std::wstring timeString = L"FPS: " + std::to_wstring(fps);
 
     renderTarget->DrawText(
         timeString.c_str(), timeString.size(),
