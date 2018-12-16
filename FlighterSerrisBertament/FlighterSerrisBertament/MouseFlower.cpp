@@ -44,6 +44,7 @@ std::list<std::shared_ptr<Sprite>> MouseFlower::update() {
       // Pick a random color from D2D1::ColorF.
       color = getRandomColor();
     }
+    float getZ() { return -1; }
     bool isDead() { return life <= 0; }
     std::list<std::shared_ptr<Sprite>> update() {
       x += vx;
