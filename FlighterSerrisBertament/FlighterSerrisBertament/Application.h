@@ -16,6 +16,7 @@ class Application {
   int fps;
   int fpsSecondRecord;
   int fpsFrameCount;
+  std::shared_ptr<Mouse> mouse;
   std::shared_ptr<MouseFlower> mouseFlower;
 
  public:
@@ -46,7 +47,7 @@ class Application {
   void OnResize(UINT width, UINT height);
 
   // Records the mouse position
-  void mouseMove(int x, int y) { mouseFlower->mouseTo(x, y); }
+  void mouseMove(int x, int y) { mouse->mouseTo(x, y); }
 
   // The windows procedure.
   static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,

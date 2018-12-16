@@ -6,14 +6,11 @@
 
 #include <random>
 
-MouseFlower::MouseFlower() : x(0), y(0), generateShadowCountdown(0) {}
+MouseFlower::MouseFlower(std::shared_ptr<Mouse> mousein)
+    : mouse(mousein), generateShadowCountdown(0) {}
 
 MouseFlower::~MouseFlower() {}
 
-void MouseFlower::mouseTo(int xin, int yin) {
-  x = xin;
-  y = yin;
-}
 // Updates the status of the sprite. Return any new sprites.
 std::list<std::shared_ptr<Sprite>> MouseFlower::update() {
   class Shadow : public Sprite {
@@ -79,18 +76,19 @@ std::list<std::shared_ptr<Sprite>> MouseFlower::update() {
         MIN_LIFE_SPAWN_SHADOW, MAX_LIFE_SPAWN_SHADOW);
     static std::normal_distribution<float> speedDistribution(0, 1);
     generateShadowCountdown = countdownDistribution(randomEngine);
-    return {
-        std::make_shared<Shadow>(static_cast<float>(x), static_cast<float>(y),
-                                 speedDistribution(randomEngine) * 10,
-                                 speedDistribution(randomEngine) * 10, 0.0F,
-                                 DEFAULT_AY, lifeDistribution(randomEngine))};
+    return {std::make_shared<Shadow>(
+        static_cast<float>(mouse->getX()), static_cast<float>(mouse->getY()),
+        speedDistribution(randomEngine) * 10,
+        speedDistribution(randomEngine) * 10, 0.0F, DEFAULT_AY,
+        lifeDistribution(randomEngine))};
   }
   return {};
 }
 void MouseFlower::draw(DeviceResources& deviceResources) {
   // Draw an ellipse
   D2D1_ELLIPSE ellipse =
-      D2D1::Ellipse(D2D1::Point2F(static_cast<FLOAT>(x), static_cast<FLOAT>(y)),
+      D2D1::Ellipse(D2D1::Point2F(static_cast<FLOAT>(mouse->getX()),
+                                  static_cast<FLOAT>(mouse->getY())),
                     FLOWER_RADIUS, FLOWER_RADIUS);
 
   // Draw the ellipse following the mouse.

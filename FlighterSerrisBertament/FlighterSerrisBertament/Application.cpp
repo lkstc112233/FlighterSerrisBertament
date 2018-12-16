@@ -9,7 +9,8 @@
 #pragma comment(lib, "Dwrite")
 
 Application::Application() : m_hwnd(NULL), fps(0) {
-  mouseFlower = std::make_shared<MouseFlower>();
+  mouse = std::make_shared<Mouse>();
+  mouseFlower = std::make_shared<MouseFlower>(mouse);
   spriteManager.addSprite(mouseFlower);
 }
 
