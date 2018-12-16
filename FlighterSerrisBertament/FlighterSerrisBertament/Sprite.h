@@ -6,8 +6,8 @@ class Sprite {
  public:
   Sprite() {}
   virtual ~Sprite() {}
-  virtual bool isDead() { return false; }
-  virtual float getZ() { return 0.0F; }
+  virtual bool isDead() const { return false; }
+  virtual float getZ() const { return 0.0F; }
   // Updates the status of the sprite. Return any new sprites.
   virtual std::list<std::shared_ptr<Sprite>> update() = 0;
   virtual void draw(DeviceResources& deviceResources) = 0;
