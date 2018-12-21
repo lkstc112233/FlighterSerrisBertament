@@ -15,7 +15,7 @@ class MouseDots {
     float radius;
 
    public:
-    DotSprite(MouseDots* parenti) : parent(parenti), radius(1) {
+    DotSprite(MouseDots* parenti) : parent(parenti), radius(2) {
       color = getRandomColor();
     }
     virtual std::list<std::shared_ptr<Sprite>> update() { return {}; }
