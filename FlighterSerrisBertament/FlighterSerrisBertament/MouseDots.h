@@ -7,9 +7,11 @@
 class MouseDots {
  private:
   std::shared_ptr<Mouse> mouse;
+  float x;
+  float y;
 
  public:
-  MouseDots(std::shared_ptr<Mouse> mouse);
+  MouseDots(std::shared_ptr<Mouse> mouse, float xin, float yin);
   ~MouseDots();
   std::shared_ptr<Sprite> getSprite();
 };

@@ -2,7 +2,8 @@
 
 #include "MouseDots.h"
 
-MouseDots::MouseDots(std::shared_ptr<Mouse> mousei) : mouse(mousei) {}
+MouseDots::MouseDots(std::shared_ptr<Mouse> mousei, float xin, float yin)
+    : mouse(mousei), x(xin), y(yin) {}
 
 MouseDots::~MouseDots() {}
 
