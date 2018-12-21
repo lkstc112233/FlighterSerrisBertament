@@ -7,6 +7,11 @@ MouseDots::MouseDots(std::shared_ptr<Mouse> mousei, float xin, float yin)
 
 MouseDots::~MouseDots() {}
 
+MouseDots::DotSprite::DotSprite(MouseDots* parenti)
+    : parent(parenti), radius(2) {
+  color = getRandomColor();
+}
+
 void MouseDots::update(float time) {
   // Move the dot towards the mouse.
   float speed = 1.0F;
@@ -27,6 +32,16 @@ void MouseDots::update(float time) {
     x += dx * rate / 2;
     y += dx * rate / 2;
   }
+}
+
+void MouseDots::DotSprite::draw(DeviceResources& deviceResources) {
+  // Draw an ellipse
+  D2D1_ELLIPSE ellipse =
+      D2D1::Ellipse(D2D1::Point2F(parent->x, parent->y), radius, radius);
+
+  // Draw the ellipse following the mouse.
+  deviceResources.getRenderTarget()->FillEllipse(
+      &ellipse, deviceResources.getBrush(color));
 }
 
 std::shared_ptr<Sprite> MouseDots::getSprite() {

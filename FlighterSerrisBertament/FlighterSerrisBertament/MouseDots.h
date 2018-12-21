@@ -15,19 +15,9 @@ class MouseDots {
     float radius;
 
    public:
-    DotSprite(MouseDots* parenti) : parent(parenti), radius(2) {
-      color = getRandomColor();
-    }
+    DotSprite(MouseDots* parenti);
     virtual std::list<std::shared_ptr<Sprite>> update() { return {}; }
-    virtual void draw(DeviceResources& deviceResources) {
-      // Draw an ellipse
-      D2D1_ELLIPSE ellipse =
-          D2D1::Ellipse(D2D1::Point2F(parent->x, parent->y), radius, radius);
-
-      // Draw the ellipse following the mouse.
-      deviceResources.getRenderTarget()->FillEllipse(
-          &ellipse, deviceResources.getBrush(color));
-    }
+    virtual void draw(DeviceResources& deviceResources);
   };
 
  private:
