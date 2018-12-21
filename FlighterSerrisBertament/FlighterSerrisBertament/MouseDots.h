@@ -8,6 +8,7 @@
 /* A class for physical representation for the dots. */
 class MouseDots {
  private:
+  /* The coresponding sprite for MouseDot. */
   class DotSprite : public Sprite {
    private:
     MouseDots* parent;
