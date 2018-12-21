@@ -13,5 +13,6 @@ class MouseDots {
  public:
   MouseDots(std::shared_ptr<Mouse> mouse, float xin, float yin);
   ~MouseDots();
+  void update(float time);
   std::shared_ptr<Sprite> getSprite();
 };
