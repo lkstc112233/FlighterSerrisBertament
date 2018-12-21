@@ -13,3 +13,8 @@ Vec2& Vec2::operator*=(const Vec2& op) {
   y *= op.y;
   return *this;
 }
+
+Vec2 Vec2::operator*(const Vec2& op) const {
+  Vec2 result = *this;
+  return result *= op;
+}

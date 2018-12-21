@@ -8,4 +8,5 @@ class Vec2 {
   ~Vec2();
   // point-wise multiply.
   Vec2& operator*=(const Vec2& op);
+  Vec2 operator*(const Vec2& op) const;
 };
