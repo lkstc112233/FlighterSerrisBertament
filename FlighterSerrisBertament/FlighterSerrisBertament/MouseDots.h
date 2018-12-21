@@ -32,3 +32,16 @@ class MouseDots {
   void update(float time);
   std::shared_ptr<Sprite> getSprite();
 };
+
+class MouseDotsManager {
+ private:
+  std::vector<std::shared_ptr<MouseDots>> dots;
+
+ public:
+  template <typename... Args>
+  std::shared_ptr<MouseDots> addDot(Args&&... arg) {
+    dots.emplace_back(arg...);
+    return dots.back();
+  }
+  void update(float time);
+};

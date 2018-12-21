@@ -50,3 +50,9 @@ std::shared_ptr<Sprite> MouseDots::getSprite() {
   }
   return sprite;
 }
+
+void MouseDotsManager::update(float time) {
+  for (auto& dot : dots) {
+    dot->update(0.1F);
+  }
+}
