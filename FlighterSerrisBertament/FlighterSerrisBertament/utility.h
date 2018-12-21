@@ -27,3 +27,4 @@ EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #endif
 
 D2D1::ColorF::Enum getRandomColor();
+SYSTEMTIME operator-(const SYSTEMTIME& pSr, const SYSTEMTIME& pSl);
