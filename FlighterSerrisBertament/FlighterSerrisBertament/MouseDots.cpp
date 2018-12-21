@@ -30,6 +30,8 @@ void MouseDots::update(float time) {
 }
 
 std::shared_ptr<Sprite> MouseDots::getSprite() {
-  throw 0;  // Not implemented
+  if (!sprite) {
+    sprite = std::make_shared<DotSprite>(this);
+  }
   return sprite;
 }
