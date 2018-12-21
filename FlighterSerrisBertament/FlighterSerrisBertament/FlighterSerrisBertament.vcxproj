@@ -125,6 +125,7 @@
     <ClCompile Include="FpsSprite.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="MouseDots.cpp" />
     <ClCompile Include="MouseFlower.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -140,6 +141,7 @@
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="FpsSprite.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="MouseDots.h" />
     <ClInclude Include="MouseFlower.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
