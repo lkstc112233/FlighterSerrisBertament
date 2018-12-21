@@ -66,7 +66,7 @@ LRESULT CALLBACK Application::WndProc(HWND hwnd, UINT message, WPARAM wParam,
             pApplication->fpsFrameCount = 0;
           }
           pApplication->fpsFrameCount += 1;
-          pApplication->spriteManager.update();
+          pApplication->update();
           pApplication->OnRender();
           ValidateRect(hwnd, NULL);
         }

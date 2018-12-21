@@ -178,3 +178,5 @@ void Application::OnResize(UINT width, UINT height) {
     deviceResources->getRenderTarget()->Resize(D2D1::SizeU(width, height));
   }
 }
+
+void Application::update() { spriteManager.update(); }

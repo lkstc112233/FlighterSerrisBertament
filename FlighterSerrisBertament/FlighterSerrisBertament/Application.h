@@ -46,6 +46,9 @@ class Application {
   // Resize the render target.
   void OnResize(UINT width, UINT height);
 
+  // updates required status.
+  void update();
+
   // Records the mouse position
   void mouseMove(int x, int y) { mouse->mouseTo(x, y); }
 
