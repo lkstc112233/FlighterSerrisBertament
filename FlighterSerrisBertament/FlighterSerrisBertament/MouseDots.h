@@ -16,7 +16,6 @@ class MouseDots {
 
    public:
     DotSprite(MouseDots* parenti);
-    virtual std::list<std::shared_ptr<Sprite>> update() { return {}; }
     virtual void draw(DeviceResources& deviceResources);
   };
 
