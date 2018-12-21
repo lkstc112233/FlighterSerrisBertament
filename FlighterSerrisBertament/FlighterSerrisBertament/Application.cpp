@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <random>
 #include <string>
 
 #include "Application.h"
@@ -10,8 +11,15 @@
 
 Application::Application() : m_hwnd(NULL), fps(0) {
   mouse = std::make_shared<Mouse>();
-  mouseFlower = std::make_shared<MouseFlower>(mouse);
-  spriteManager.addSprite(mouseFlower->getSprite());
+  std::default_random_engine randomEngine;
+  std::uniform_real_distribution<float> positionDistribution(0, 500);
+
+  for (int i = 0; i < 100; ++i) {
+    mouseDots.emplace_back(
+        std::make_shared<MouseDots>(mouse, positionDistribution(randomEngine),
+                                    positionDistribution(randomEngine)));
+    spriteManager.addSprite(mouseDots.back()->getSprite());
+  }
 }
 
 Application::~Application() {}
@@ -179,4 +187,9 @@ void Application::OnResize(UINT width, UINT height) {
   }
 }
 
-void Application::update() { spriteManager.update(); }
+void Application::update() {
+  for (auto &dot : mouseDots) {
+    dot->update(0.1F);
+  }
+  spriteManager.update();
+}

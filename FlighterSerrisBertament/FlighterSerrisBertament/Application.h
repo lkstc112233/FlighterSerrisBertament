@@ -2,6 +2,7 @@
 
 #include "DeviceIndependentResources.h"
 #include "DeviceResources.h"
+#include "MouseDots.h"
 #include "MouseFlower.h"
 #include "Sprite.h"
 
@@ -17,7 +18,7 @@ class Application {
   int fpsSecondRecord;
   int fpsFrameCount;
   std::shared_ptr<Mouse> mouse;
-  std::shared_ptr<MouseFlower> mouseFlower;
+  std::vector<std::shared_ptr<MouseDots>> mouseDots;
 
  public:
   Application();
