@@ -1,8 +1,8 @@
 #pragma once
 class Mouse {
  private:
-  int x;
-  int y;
+  int x = 0;
+  int y = 0;
 
  public:
   Mouse();
