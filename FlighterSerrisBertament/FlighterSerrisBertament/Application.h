@@ -18,7 +18,7 @@ class Application {
   int fpsSecondRecord;
   int fpsFrameCount;
   std::shared_ptr<Mouse> mouse;
-  std::vector<std::shared_ptr<MouseDots>> mouseDots;
+  MouseDotsManager mouseDots;
 
  public:
   Application();

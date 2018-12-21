@@ -15,10 +15,10 @@ Application::Application() : m_hwnd(NULL), fps(0) {
   std::uniform_real_distribution<float> positionDistribution(0, 500);
 
   for (int i = 0; i < 100; ++i) {
-    mouseDots.emplace_back(
-        std::make_shared<MouseDots>(mouse, positionDistribution(randomEngine),
-                                    positionDistribution(randomEngine)));
-    spriteManager.addSprite(mouseDots.back()->getSprite());
+    auto dot = mouseDots.addDot(std::make_shared<MouseDots>(
+        mouse, mouseDots, positionDistribution(randomEngine),
+        positionDistribution(randomEngine)));
+    spriteManager.addSprite(dot->getSprite());
   }
 }
 
@@ -188,8 +188,6 @@ void Application::OnResize(UINT width, UINT height) {
 }
 
 void Application::update() {
-  for (auto &dot : mouseDots) {
-    dot->update(0.1F);
-  }
+  mouseDots.update(0.1F);
   spriteManager.update();
 }

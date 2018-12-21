@@ -1,9 +1,14 @@
 #pragma once
 
+#include <vector>
+
 #include "Mouse.h"
 #include "Sprite.h"
 
 #include "utility.h"
+
+// Predefinition of the dots manager.
+class MouseDotsManager;
 
 /* A class for physical representation for the dots. */
 class MouseDots {
@@ -23,11 +28,13 @@ class MouseDots {
  private:
   std::shared_ptr<Mouse> mouse;
   std::shared_ptr<DotSprite> sprite;
+  MouseDotsManager& manager;
   float x;
   float y;
 
  public:
-  MouseDots(std::shared_ptr<Mouse> mouse, float xin, float yin);
+  MouseDots(std::shared_ptr<Mouse> mouse, MouseDotsManager& manager, float xin,
+            float yin);
   ~MouseDots();
   void update(float time);
   std::shared_ptr<Sprite> getSprite();
