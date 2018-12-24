@@ -14,6 +14,9 @@ class Vec2 {
   // point-wise multiply.
   Vec2& operator*=(const Vec2& op);
   Vec2 operator*(const Vec2& op) const;
+  // point-wise multiply.
+  Vec2& operator*=(float op);
+  Vec2 operator*(float op) const;
   // negative
   Vec2 operator-() const;
 };
