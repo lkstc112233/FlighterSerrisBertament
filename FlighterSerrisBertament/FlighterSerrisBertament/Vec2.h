@@ -18,7 +18,7 @@ class Vec2 {
   Vec2 operator*(float op) const;
   // negative
   Vec2 operator-() const;
-  float length();
+  float length() const;
 };
 
 Vec2 operator*(float op, const Vec2& vec);
