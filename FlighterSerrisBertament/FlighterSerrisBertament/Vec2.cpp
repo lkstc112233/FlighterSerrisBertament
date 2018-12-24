@@ -58,3 +58,5 @@ Vec2 Vec2::operator-() const {
   result.y = -this->y;
   return result;
 }
+
+Vec2 operator*(float op, const Vec2& vec) { return vec * op; }
