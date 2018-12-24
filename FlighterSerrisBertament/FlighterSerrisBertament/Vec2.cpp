@@ -40,3 +40,10 @@ Vec2 Vec2::operator*(const Vec2& op) const {
   Vec2 result = *this;
   return result *= op;
 }
+
+Vec2 Vec2::operator-() const {
+  Vec2 result;
+  result.x = -this->x;
+  result.y = -this->y;
+  return result;
+}

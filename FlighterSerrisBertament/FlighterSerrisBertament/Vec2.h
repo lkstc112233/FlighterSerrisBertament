@@ -6,7 +6,7 @@ class Vec2 {
   Vec2(float both = 0.0F);
   Vec2(float x, float y);
   ~Vec2();
-  // point-wise minus.
+  // point-wise add and minus.
   Vec2& operator+=(const Vec2& op);
   Vec2 operator+(const Vec2& op) const;
   Vec2& operator-=(const Vec2& op);
@@ -14,4 +14,6 @@ class Vec2 {
   // point-wise multiply.
   Vec2& operator*=(const Vec2& op);
   Vec2 operator*(const Vec2& op) const;
+  // negative
+  Vec2 operator-() const;
 };
