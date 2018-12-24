@@ -60,3 +60,7 @@ Vec2 Vec2::operator-() const {
 }
 
 Vec2 operator*(float op, const Vec2& vec) { return vec * op; }
+
+float dot(const Vec2& op, const Vec2& op2) {
+  return op.x * op2.x + op.y * op2.y;
+}
