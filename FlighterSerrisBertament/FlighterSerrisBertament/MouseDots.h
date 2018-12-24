@@ -4,6 +4,7 @@
 
 #include "Mouse.h"
 #include "Sprite.h"
+#include "Vec2.h"
 
 #include "utility.h"
 
@@ -29,8 +30,7 @@ class MouseDots {
   std::shared_ptr<Mouse> mouse;
   std::shared_ptr<DotSprite> sprite;
   MouseDotsManager& manager;
-  float x;
-  float y;
+  Vec2 position;
 
  public:
   MouseDots(std::shared_ptr<Mouse> mouse, MouseDotsManager& manager, float xin,

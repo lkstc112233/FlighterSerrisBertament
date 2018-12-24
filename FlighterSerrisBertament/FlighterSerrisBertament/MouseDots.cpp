@@ -4,7 +4,7 @@
 
 MouseDots::MouseDots(std::shared_ptr<Mouse> mousein,
                      MouseDotsManager& managerin, float xin, float yin)
-    : mouse(mousein), manager(managerin), x(xin), y(yin) {}
+    : mouse(mousein), manager(managerin), position(xin, yin) {}
 
 MouseDots::~MouseDots() {}
 
@@ -18,27 +18,24 @@ void MouseDots::update(float time) {
   float speed = 1.0F;
 
   // Calculate direction
-  float dx = mouse->getX() - x;
-  float dy = mouse->getY() - y;
+  Vec2 diff = mouse->getPosition() - position;
 
   // Calculate rate
-  float rate = 1 / sqrt((dx * dx + dy * dy)) / speed;
+  float rate = 1 / diff.length() / speed;
 
   // Move the dot
   if (rate < 1 / speed) {
-    x += dx * rate;
-    y += dy * rate;
+    position += diff * rate;
   } else {
     // If near enough, only half the move is performed.
-    x += dx * rate / 2;
-    y += dx * rate / 2;
+    position += diff * (rate / 2);
   }
 }
 
 void MouseDots::DotSprite::draw(DeviceResources& deviceResources) {
   // Draw an ellipse
-  D2D1_ELLIPSE ellipse =
-      D2D1::Ellipse(D2D1::Point2F(parent->x, parent->y), radius, radius);
+  D2D1_ELLIPSE ellipse = D2D1::Ellipse(
+      D2D1::Point2F(parent->position.x, parent->position.y), radius, radius);
 
   // Draw the ellipse following the mouse.
   deviceResources.getRenderTarget()->FillEllipse(
