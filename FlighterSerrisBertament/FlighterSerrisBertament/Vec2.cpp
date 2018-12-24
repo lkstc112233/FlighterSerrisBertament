@@ -61,6 +61,13 @@ Vec2 Vec2::operator-() const {
 
 float Vec2::length() const { return sqrt(x * x + y * y); }
 
+Vec2& Vec2::normalize() {
+  float len = length();
+  x /= len;
+  y /= len;
+  return *this;
+}
+
 Vec2 operator*(float op, const Vec2& vec) { return vec * op; }
 
 float dot(const Vec2& op, const Vec2& op2) {
