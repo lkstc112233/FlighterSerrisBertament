@@ -19,16 +19,12 @@ void MouseDots::update(float time) {
 
   // Calculate direction
   Vec2 diff = mouse->getPosition() - position;
+  float distance = diff.length();
+  diff.normalize() *= speed;
 
-  // Calculate rate
-  float rate = 1 / diff.length() / speed;
-
-  // Move the dot
-  if (rate < 1 / speed) {
-    position += diff * rate;
-  } else {
-    // If near enough, only half the move is performed.
-    position += diff * (rate / 2);
+  // Move the dot, unless the dot is near enough.
+  if (distance > 5 * speed) {
+    position += diff;
   }
 }
 
