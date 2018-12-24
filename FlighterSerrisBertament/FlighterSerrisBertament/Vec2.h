@@ -24,3 +24,4 @@ class Vec2 {
 
 Vec2 operator*(float op, const Vec2& vec);
 float dot(const Vec2& op, const Vec2& op2);
+Vec2 normalize(const Vec2& op);
