@@ -1,5 +1,7 @@
 #pragma once
 #include "Sprite.h"
+
+// A sprite for displaying fps.
 class FpsSprite : public Sprite {
  public:
   FpsSprite();
