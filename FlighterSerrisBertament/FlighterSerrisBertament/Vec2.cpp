@@ -59,6 +59,8 @@ Vec2 Vec2::operator-() const {
   return result;
 }
 
+float Vec2::length() { return sqrt(x * x + y * y); }
+
 Vec2 operator*(float op, const Vec2& vec) { return vec * op; }
 
 float dot(const Vec2& op, const Vec2& op2) {
