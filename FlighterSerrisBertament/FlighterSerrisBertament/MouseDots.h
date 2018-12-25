@@ -52,4 +52,6 @@ class MouseDotsManager {
     return dots.back();
   }
   void update(float time);
+  std::vector<std::shared_ptr<MouseDots>> getNearbyDots(Vec2 position,
+                                                        float distance = 10);
 };
