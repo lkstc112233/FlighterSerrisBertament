@@ -36,6 +36,7 @@ class MouseDots {
   MouseDots(std::shared_ptr<Mouse> mouse, MouseDotsManager& manager, float xin,
             float yin);
   ~MouseDots();
+  Vec2 getPosition() { return position; }
   void update(float time);
   std::shared_ptr<Sprite> getSprite();
 };
