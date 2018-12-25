@@ -2,16 +2,22 @@
 
 #include "MouseDots.h"
 
+#include <random>
+
+static std::default_random_engine randomEngine;
+static std::uniform_int_distribution<int> dotTypeDistribution(0, 1);
+
 MouseDots::MouseDots(std::shared_ptr<Mouse> mousein,
                      MouseDotsManager& managerin, float xin, float yin)
-    : mouse(mousein), manager(managerin), position(xin, yin) {}
+    : mouse(mousein),
+      manager(managerin),
+      position(xin, yin),
+      type(dotTypeDistribution(randomEngine) ? WEAK : STRONG) {}
 
 MouseDots::~MouseDots() {}
 
-MouseDots::DotSprite::DotSprite(MouseDots* parenti)
-    : parent(parenti), radius(2) {
-  color = getRandomColor();
-}
+MouseDots::DotSprite::DotSprite(MouseDots* parenti, D2D1::ColorF::Enum colori)
+    : parent(parenti), radius(2), color(colori) {}
 
 void MouseDots::update(float time) {
   // Move the dot towards the mouse.
@@ -28,9 +34,9 @@ void MouseDots::update(float time) {
   }
 
   // Avoid other dots.
-  const float repealForceFactor = 10.0F;
+  float repealForceFactor = type == WEAK ? 10.0F : 20.0F;
   Vec2 force;
-  auto nearby = manager.getNearbyDots(position);
+  auto nearby = manager.getNearbyDots(position, type == WEAK ? 10.0F : 20.0F);
   for (auto& dot : nearby) {
     // Note that I'm comparing dot with this. This is a workaround for the
     // pointer issue. Will be changed soon.
@@ -55,7 +61,8 @@ void MouseDots::DotSprite::draw(DeviceResources& deviceResources) {
 
 std::shared_ptr<Sprite> MouseDots::getSprite() {
   if (!sprite) {
-    sprite = std::make_shared<DotSprite>(this);
+    sprite = std::make_shared<DotSprite>(
+        this, type == WEAK ? D2D1::ColorF::Blue : D2D1::ColorF::Red);
   }
   return sprite;
 }

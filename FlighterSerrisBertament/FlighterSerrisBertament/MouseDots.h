@@ -13,6 +13,9 @@ class MouseDotsManager;
 
 /* A class for physical representation for the dots. */
 class MouseDots {
+ public:
+  enum Type { WEAK, STRONG };
+
  private:
   /* The coresponding sprite for MouseDot. */
   class DotSprite : public Sprite {
@@ -22,7 +25,7 @@ class MouseDots {
     float radius;
 
    public:
-    DotSprite(MouseDots* parenti);
+    DotSprite(MouseDots* parenti, D2D1::ColorF::Enum color);
     virtual void draw(DeviceResources& deviceResources);
   };
 
@@ -31,6 +34,7 @@ class MouseDots {
   std::shared_ptr<DotSprite> sprite;
   MouseDotsManager& manager;
   Vec2 position;
+  Type type;
 
  public:
   MouseDots(std::shared_ptr<Mouse> mouse, MouseDotsManager& manager, float xin,
