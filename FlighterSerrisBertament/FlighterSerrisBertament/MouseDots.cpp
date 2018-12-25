@@ -26,6 +26,21 @@ void MouseDots::update(float time) {
   if (distance > 5 * speed) {
     position += diff;
   }
+
+  // Avoid other dots.
+  const float repealForceFactor = 10.0F;
+  Vec2 force;
+  auto nearby = manager.getNearbyDots(position);
+  for (auto& dot : nearby) {
+    // Note that I'm comparing dot with this. This is a workaround for the
+    // pointer issue. Will be changed soon.
+    if (dot.get() == this) {
+      continue;
+    }
+    auto distance = position - dot->getPosition();
+    force += normalize(distance) * (repealForceFactor / distance.length());
+  }
+  position += force;
 }
 
 void MouseDots::DotSprite::draw(DeviceResources& deviceResources) {
