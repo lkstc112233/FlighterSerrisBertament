@@ -17,8 +17,6 @@ void SpriteManager::update() {
 }
 
 void SpriteManager::draw(DeviceResources& deviceResources) {
-  sprites.sort(
-      [](const auto& s1, const auto& s2) { return s1->getZ() < s2->getZ(); });
   for (const auto& sprite : sprites) {
     sprite->draw(deviceResources);
   }

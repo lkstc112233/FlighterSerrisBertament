@@ -78,7 +78,6 @@ class MouseFlower {
       // Pick a random color from D2D1::ColorF.
       color = getRandomColor();
     }
-    virtual float getZ() const { return -1; }
     virtual bool isDead() const { return life <= 0; }
     virtual std::list<std::shared_ptr<Sprite>> update() {
       x += vx;
