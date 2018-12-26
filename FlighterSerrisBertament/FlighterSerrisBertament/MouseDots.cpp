@@ -19,6 +19,11 @@ MouseDots::~MouseDots() {}
 MouseDots::DotSprite::DotSprite(MouseDots* parenti, D2D1::ColorF::Enum colori)
     : parent(parenti), radius(2), color(colori) {}
 
+std::list<std::shared_ptr<Sprite>> MouseDots::DotSprite::update() {
+  return {std::make_shared<FadingDotSprite>(color, radius, parent->position.x,
+                                            parent->position.y)};
+}
+
 void MouseDots::update(float time) {
   // Move the dot towards the mouse.
   float speed = 1.0F;
@@ -82,4 +87,24 @@ std::vector<std::shared_ptr<MouseDots>> MouseDotsManager::getNearbyDots(
     }
   }
   return result;
+}
+
+MouseDots::FadingDotSprite::FadingDotSprite(D2D1::ColorF::Enum colori,
+                                            float radiusi, float xin, float yin,
+                                            float ratei)
+    : color(colori), rate(ratei), x(xin), y(yin), radius(radiusi) {}
+
+bool MouseDots::FadingDotSprite::isDead() const { return radius < 0.5; }
+
+std::list<std::shared_ptr<Sprite>> MouseDots::FadingDotSprite::update() {
+  radius *= rate;
+  return {};
+}
+
+void MouseDots::FadingDotSprite::draw(DeviceResources& deviceResources) {
+  // Draw an ellipse
+  D2D1_ELLIPSE ellipse = D2D1::Ellipse(D2D1::Point2F(x, y), radius, radius);
+
+  deviceResources.getRenderTarget()->FillEllipse(
+      &ellipse, deviceResources.getBrush(color));
 }
