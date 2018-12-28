@@ -21,6 +21,7 @@ class Vec2 {
   // negative
   Vec2 operator-() const;
   float length() const;
+  float lengthSquared() const;
   Vec2& normalize();
 };
 

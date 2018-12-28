@@ -82,9 +82,10 @@ void MouseDotsManager::update(float time) {
 
 std::vector<std::shared_ptr<MouseDots>> MouseDotsManager::getNearbyDots(
     Vec2 position, float distance) {
+  float distanceSquared = distance * distance;
   std::vector<std::shared_ptr<MouseDots>> result;
   for (auto& dot : dots) {
-    if ((dot->getPosition() -= position).length() < distance) {
+    if ((dot->getPosition() -= position).lengthSquared() < distanceSquared) {
       result.emplace_back(dot);
     }
   }
