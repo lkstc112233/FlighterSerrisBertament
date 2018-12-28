@@ -21,25 +21,25 @@ class MouseDots {
   class DotSprite : public Sprite {
    private:
     MouseDots* parent;
-    D2D1::ColorF::Enum color;
+    ID2D1SolidColorBrush* (DeviceResources::*getBrush)(void);
     float radius;
 
    public:
-    DotSprite(MouseDots* parenti, D2D1::ColorF::Enum color);
+    DotSprite(MouseDots* parenti, decltype(getBrush) getBrush);
     virtual void update(std::list<std::shared_ptr<Sprite>>& toAdd);
     virtual void draw(DeviceResources& deviceResources);
   };
   /* The coresponding sprite for MouseDot. */
   class FadingDotSprite : public Sprite {
    private:
-    D2D1::ColorF::Enum color;
+    ID2D1SolidColorBrush* (DeviceResources::*getBrush)(void);
     float radius;
     const float x;
     const float y;
     const float rate;
 
    public:
-    FadingDotSprite(D2D1::ColorF::Enum color, float radius, float x, float y,
+    FadingDotSprite(decltype(getBrush) getBrush, float radius, float x, float y,
                     float rate = 0.9);
     virtual bool isDead() const;
     virtual void update(std::list<std::shared_ptr<Sprite>>& toAdd);

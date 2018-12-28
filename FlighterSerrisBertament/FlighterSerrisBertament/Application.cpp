@@ -130,14 +130,13 @@ HRESULT Application::OnRender() {
       renderTarget->DrawLine(
           D2D1::Point2F(static_cast<FLOAT>(x), 0.0f),
           D2D1::Point2F(static_cast<FLOAT>(x), rtSize.height),
-          deviceResources->getBrush(D2D1::ColorF::LightSlateGray), 0.5f);
+          deviceResources->getLightSlateGrayBrush(), 0.5f);
     }
 
     for (int y = 0; y < height; y += 10) {
-      renderTarget->DrawLine(
-          D2D1::Point2F(0.0f, static_cast<FLOAT>(y)),
-          D2D1::Point2F(rtSize.width, static_cast<FLOAT>(y)),
-          deviceResources->getBrush(D2D1::ColorF::LightSlateGray), 0.5f);
+      renderTarget->DrawLine(D2D1::Point2F(0.0f, static_cast<FLOAT>(y)),
+                             D2D1::Point2F(rtSize.width, static_cast<FLOAT>(y)),
+                             deviceResources->getLightSlateGrayBrush(), 0.5f);
     }
 
     // Draw two rectangles.
@@ -152,12 +151,12 @@ HRESULT Application::OnRender() {
     spriteManager.draw(*deviceResources);
 
     // Draw a filled rectangle.
-    renderTarget->FillRectangle(
-        &rectangle1, deviceResources->getBrush(D2D1::ColorF::LightSlateGray));
+    renderTarget->FillRectangle(&rectangle1,
+                                deviceResources->getLightSlateGrayBrush());
 
     // Draw the outline of a rectangle.
-    renderTarget->DrawRectangle(
-        &rectangle2, deviceResources->getBrush(D2D1::ColorF::CornflowerBlue));
+    renderTarget->DrawRectangle(&rectangle2,
+                                deviceResources->getCornflowerBlueBrush());
 
     std::wstring timeString = L"FPS: " + std::to_wstring(fps);
 
@@ -165,7 +164,7 @@ HRESULT Application::OnRender() {
         timeString.c_str(), timeString.size(),
         deviceIndependentResources->getTextFormat(msc_fontName, msc_fontSize),
         D2D1::RectF(0, 0, rtSize.width, rtSize.height),
-        deviceResources->getBrush(D2D1::ColorF::Black));
+        deviceResources->getBlackBrush());
 
     hr = renderTarget->EndDraw();
   }

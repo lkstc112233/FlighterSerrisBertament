@@ -16,12 +16,13 @@ MouseDots::MouseDots(std::shared_ptr<Mouse> mousein,
 
 MouseDots::~MouseDots() {}
 
-MouseDots::DotSprite::DotSprite(MouseDots* parenti, D2D1::ColorF::Enum colori)
-    : parent(parenti), radius(2), color(colori) {}
+MouseDots::DotSprite::DotSprite(MouseDots* parenti,
+                                decltype(getBrush) getBrushi)
+    : parent(parenti), radius(2), getBrush(getBrushi) {}
 
 void MouseDots::DotSprite::update(std::list<std::shared_ptr<Sprite>>& toAdd) {
   toAdd.emplace_back(std::make_shared<FadingDotSprite>(
-      color, radius, parent->position.x, parent->position.y));
+      getBrush, radius, parent->position.x, parent->position.y));
 }
 
 void MouseDots::update(float time) {
@@ -60,14 +61,15 @@ void MouseDots::DotSprite::draw(DeviceResources& deviceResources) {
       D2D1::Point2F(parent->position.x, parent->position.y), radius, radius);
 
   // Draw the ellipse following the mouse.
-  deviceResources.getRenderTarget()->FillEllipse(
-      &ellipse, deviceResources.getBrush(color));
+  deviceResources.getRenderTarget()->FillEllipse(&ellipse,
+                                                 (deviceResources.*getBrush)());
 }
 
 std::shared_ptr<Sprite> MouseDots::getSprite() {
   if (!sprite) {
     sprite = std::make_shared<DotSprite>(
-        this, type == WEAK ? D2D1::ColorF::Blue : D2D1::ColorF::Red);
+        this, type == WEAK ? &DeviceResources::getBlueBrush
+                           : &DeviceResources::getRedBrush);
   }
   return sprite;
 }
@@ -89,10 +91,10 @@ std::vector<std::shared_ptr<MouseDots>> MouseDotsManager::getNearbyDots(
   return result;
 }
 
-MouseDots::FadingDotSprite::FadingDotSprite(D2D1::ColorF::Enum colori,
+MouseDots::FadingDotSprite::FadingDotSprite(decltype(getBrush) getBrushi,
                                             float radiusi, float xin, float yin,
                                             float ratei)
-    : color(colori), rate(ratei), x(xin), y(yin), radius(radiusi) {}
+    : getBrush(getBrushi), rate(ratei), x(xin), y(yin), radius(radiusi) {}
 
 bool MouseDots::FadingDotSprite::isDead() const { return radius < 0.5; }
 
@@ -105,6 +107,6 @@ void MouseDots::FadingDotSprite::draw(DeviceResources& deviceResources) {
   // Draw an ellipse
   D2D1_ELLIPSE ellipse = D2D1::Ellipse(D2D1::Point2F(x, y), radius, radius);
 
-  deviceResources.getRenderTarget()->FillEllipse(
-      &ellipse, deviceResources.getBrush(color));
+  deviceResources.getRenderTarget()->FillEllipse(&ellipse,
+                                                 (deviceResources.*getBrush)());
 }
