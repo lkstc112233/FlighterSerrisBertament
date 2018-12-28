@@ -126,7 +126,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MouseDots.cpp" />
-    <ClCompile Include="MouseFlower.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -143,7 +142,6 @@
     <ClInclude Include="FpsSprite.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MouseDots.h" />
-    <ClInclude Include="MouseFlower.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="utility.h" />

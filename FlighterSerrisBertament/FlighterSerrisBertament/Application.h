@@ -3,7 +3,6 @@
 #include "DeviceIndependentResources.h"
 #include "DeviceResources.h"
 #include "MouseDots.h"
-#include "MouseFlower.h"
 #include "Sprite.h"
 
 class Application {
