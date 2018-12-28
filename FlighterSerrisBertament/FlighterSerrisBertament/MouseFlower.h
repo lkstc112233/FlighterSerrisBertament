@@ -22,7 +22,7 @@ class MouseFlower {
    public:
     Center(std::shared_ptr<Mouse> mousein)
         : mouse(mousein), generateShadowCountdown(0) {}
-    virtual std::list<std::shared_ptr<Sprite>> update() {
+    virtual void update(std::list<std::shared_ptr<Sprite>>& toAdd) {
       x = static_cast<float>(mouse->getX());
       y = static_cast<float>(mouse->getY());
       if (--generateShadowCountdown < 0) {
@@ -33,12 +33,11 @@ class MouseFlower {
             MIN_LIFE_SPAWN_SHADOW, MAX_LIFE_SPAWN_SHADOW);
         static std::normal_distribution<float> speedDistribution(0, 1);
         generateShadowCountdown = countdownDistribution(randomEngine);
-        return {std::make_shared<Shadow>(
+        toAdd.emplace_back(std::make_shared<Shadow>(
             x, y, speedDistribution(randomEngine) * 10,
             speedDistribution(randomEngine) * 10, 0.0F, DEFAULT_AY,
-            lifeDistribution(randomEngine))};
+            lifeDistribution(randomEngine)));
       }
-      return {};
     }
     virtual void draw(DeviceResources& deviceResources) {
       // Draw an ellipse
@@ -79,14 +78,13 @@ class MouseFlower {
       color = getRandomColor();
     }
     virtual bool isDead() const { return life <= 0; }
-    virtual std::list<std::shared_ptr<Sprite>> update() {
+    virtual void update(std::list<std::shared_ptr<Sprite>>& toAdd) {
       x += vx;
       y += vy;
       vx += ax;
       vy += ay;
       life -= 1;
       alpha = static_cast<float>(life) / lifeMax;
-      return {};
     }
     virtual void draw(DeviceResources& deviceResources) {
       // Draw an ellipse

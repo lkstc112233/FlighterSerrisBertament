@@ -26,7 +26,7 @@ class MouseDots {
 
    public:
     DotSprite(MouseDots* parenti, D2D1::ColorF::Enum color);
-    std::list<std::shared_ptr<Sprite>> update();
+    virtual void update(std::list<std::shared_ptr<Sprite>>& toAdd);
     virtual void draw(DeviceResources& deviceResources);
   };
   /* The coresponding sprite for MouseDot. */
@@ -42,7 +42,7 @@ class MouseDots {
     FadingDotSprite(D2D1::ColorF::Enum color, float radius, float x, float y,
                     float rate = 0.9);
     virtual bool isDead() const;
-    std::list<std::shared_ptr<Sprite>> update();
+    virtual void update(std::list<std::shared_ptr<Sprite>>& toAdd);
     virtual void draw(DeviceResources& deviceResources);
   };
 

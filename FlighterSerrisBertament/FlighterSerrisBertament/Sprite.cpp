@@ -9,8 +9,7 @@ void SpriteManager::addSprite(std::shared_ptr<Sprite> sprite) {
 void SpriteManager::update() {
   std::list<std::shared_ptr<Sprite>> addedSprites;
   for (const auto& sprite : sprites) {
-    auto toAdd = sprite->update();
-    addedSprites.insert(addedSprites.end(), toAdd.begin(), toAdd.end());
+    sprite->update(addedSprites);
   }
   sprites.insert(sprites.end(), addedSprites.begin(), addedSprites.end());
   sprites.remove_if([](const auto& s) { return s->isDead(); });

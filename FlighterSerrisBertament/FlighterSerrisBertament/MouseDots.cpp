@@ -19,9 +19,9 @@ MouseDots::~MouseDots() {}
 MouseDots::DotSprite::DotSprite(MouseDots* parenti, D2D1::ColorF::Enum colori)
     : parent(parenti), radius(2), color(colori) {}
 
-std::list<std::shared_ptr<Sprite>> MouseDots::DotSprite::update() {
-  return {std::make_shared<FadingDotSprite>(color, radius, parent->position.x,
-                                            parent->position.y)};
+void MouseDots::DotSprite::update(std::list<std::shared_ptr<Sprite>>& toAdd) {
+  toAdd.emplace_back(std::make_shared<FadingDotSprite>(
+      color, radius, parent->position.x, parent->position.y));
 }
 
 void MouseDots::update(float time) {
@@ -96,9 +96,9 @@ MouseDots::FadingDotSprite::FadingDotSprite(D2D1::ColorF::Enum colori,
 
 bool MouseDots::FadingDotSprite::isDead() const { return radius < 0.5; }
 
-std::list<std::shared_ptr<Sprite>> MouseDots::FadingDotSprite::update() {
+void MouseDots::FadingDotSprite::update(
+    std::list<std::shared_ptr<Sprite>>& toAdd) {
   radius *= rate;
-  return {};
 }
 
 void MouseDots::FadingDotSprite::draw(DeviceResources& deviceResources) {

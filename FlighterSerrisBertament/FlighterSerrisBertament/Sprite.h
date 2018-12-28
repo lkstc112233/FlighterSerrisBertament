@@ -8,7 +8,7 @@ class Sprite {
   virtual ~Sprite() {}
   virtual bool isDead() const { return false; }
   // Updates the status of the sprite. Return any new sprites.
-  virtual std::list<std::shared_ptr<Sprite>> update() { return {}; }
+  virtual void update(std::list<std::shared_ptr<Sprite>>& toAdd) {}
   virtual void draw(DeviceResources& deviceResources) = 0;
 };
 
