@@ -6,8 +6,6 @@ Vec2::Vec2(float both) : x(both), y(both) {}
 
 Vec2::Vec2(float xin, float yin) : x(xin), y(yin) {}
 
-Vec2::~Vec2() {}
-
 Vec2& Vec2::operator+=(const Vec2& op) {
   x += op.x;
   y += op.y;

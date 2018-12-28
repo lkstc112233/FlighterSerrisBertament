@@ -5,7 +5,9 @@ class Vec2 {
   float y;
   Vec2(float both = 0.0F);
   Vec2(float x, float y);
-  ~Vec2();
+  // For a POD type like this, a destructor is not needed therefore not
+  // decleared at all for a better performance.
+
   // point-wise add and minus.
   Vec2& operator+=(const Vec2& op);
   Vec2 operator+(const Vec2& op) const;
